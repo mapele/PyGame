@@ -1,11 +1,13 @@
 # coding=utf-8
+# /usr/bin/env python
+
+"""学写简单的塔防游戏"""
+
 # 1 - 导入需要的库
 import math
 import random
-
 import pygame
 from pygame.locals import *
-
 
 # 2 - 初始化游戏
 pygame.init()
@@ -47,6 +49,7 @@ while 1:
 	screen.blit(castle, (0, 240))
 	screen.blit(castle, (0, 345))
 
+
 	# 6.1 - 在屏幕上建立游戏人员图案
 	position = pygame.mouse.get_pos()  # 获取鼠标位置
 	angle = math.atan2(position[1] - (playerpos[1] + 32), position[0] - (playerpos[0] + 26))  # 计算鼠标与兔子位置角度
@@ -54,7 +57,6 @@ while 1:
 	playerpos1 = (
 	playerpos[0] - playerrot.get_rect().width / 2, playerpos[1] - playerrot.get_rect().height / 2)  # 计算旋转后兔子的位置
 	screen.blit(playerrot, playerpos1)
-
 	# 6.2 - 在屏幕上建立箭头图案
 	for bullet in arrows:
 		index = 0
@@ -62,16 +64,12 @@ while 1:
 		vely = math.sin(bullet[0]) * 10
 		bullet[1] += velx
 		bullet[2] += vely
-
 		if bullet[1] < -64 or bullet[1] > 640 or bullet[2] < -64 or bullet[2] > 480:
 			arrows.pop(index)
-
 		index += 1
-
 		for projectile in arrows:
 			arrow1 = pygame.transform.rotate(arrow, 360 - projectile[0] * 57.29)
 			screen.blit(arrow1, (projectile[1], projectile[2]))
-
 	# 6.3 - 在屏幕上建立獾图案
 	if badtimer == 0:
 		badguys.append([640, random.randint(50, 430)])
@@ -85,30 +83,28 @@ while 1:
 		if badguy[0] < -64:
 			badguys.pop(index)
 		badguy[0] -= 7
-
 		# 6.3.1 检查獾是否碰到城堡
 		badrect = pygame.Rect(badguyimg.get_rect())
 		badrect.top = badguy[1]
 		badrect.left = badguy[0]
 		if badrect.left < 64:
 			healthvalue -= random.randint(5, 20)
-			badguy.pop(index)
-		# # 6.3.2 检查箭头与獾
-		# index1 = 0
-		# for bullet in arrows:
-		# 	bullrect = pygame.Rect(arrow.get_rect())
-		# 	bullrect.left = bullet[1]
-		# 	bullrect.top = bullet[2]
-		# 	if badrect.collidedict(bullrect):
-		# 		acc[0] += 1
-		# 		badguys.pop(index)
-		# 		arrows.pop(index1)
-		# 	index1 += 1
-
+			badguys.pop(index)
+		# 6.3.2 检查箭头与獾
+		index1 = 0
+		for bullet in arrows:
+			bullrect = pygame.Rect(arrow.get_rect())
+			bullrect.left = bullet[1]
+			bullrect.top = bullet[2]
+			if badrect.colliderect(bullrect):
+				acc[0] += 1
+				badguys.pop(index)
+				arrows.pop(index1)
+			index1 += 1
+		# 6.3.3-下一个獾
 		index += 1
 	for badguy in badguys:
 		screen.blit(badguyimg, badguy)
-
 	# 7 - 更新屏幕
 	pygame.display.flip()
 	# 8 - 循环通过这个事件
