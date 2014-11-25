@@ -1,6 +1,5 @@
-# coding=utf-8
 # /usr/bin/env python
-
+# coding=utf-8
 """学写简单的塔防游戏"""
 
 # 1 - 导入需要的库
@@ -9,6 +8,7 @@ import random
 
 import pygame
 from pygame.locals import *
+
 
 
 
@@ -75,8 +75,8 @@ while running:
 	# if playerpos[0] >= 640: x = 600
 	# if playerpos[1] >= 0: y = 10
 	# if playerpos[1] <= 480: y = 420
-	playerpos1 = (
-	playerpos[0] - playerrot.get_rect().width / 2, playerpos[1] - playerrot.get_rect().height / 2)  # 计算旋转后兔子的位置
+	playerpos1 = [playerpos[0] - playerrot.get_rect().width / 2,
+				  playerpos[1] - playerrot.get_rect().height / 2]  # 计算旋转后兔子的位置
 	# xtop=playerrot.get_rect().top
 	# xbutton=playerrot.get_rect().bottom
 	# yleft=playerrot.get_rect().left
@@ -86,6 +86,10 @@ while running:
 	# if yright>480:x=480
 	# if yleft<0:x=0
 	# playerpos1 = (x,y)  # 计算旋转后兔子的位置
+	if playerpos1[0] <= 5: playerpos1[0] = 5
+	if playerpos1[0] >= 630: playerpos1[0] = 630
+	if playerpos1[1] <= 5: playerpos1[1] = 5
+	if playerpos1[1] >= 470: playerpos1[1] = 470
 
 	screen.blit(playerrot, playerpos1)
 	# 6.2 - 在屏幕上建立箭头图案
@@ -187,21 +191,17 @@ while running:
 
 	# 9 - 移动游戏人员
 	if keys[0]:
-		if playerpos[1]>=40 :
-			playerpos[1] -= 5
+		playerpos[1] -= 5
 	elif keys[2]:
-		if playerpos[1]>=440 :
-			playerpos[1] += 5
+		playerpos[1] += 5
 	if keys[1]:
-		if playerpos[0]>=600 :
-			playerpos[0] -= 5
+		playerpos[0] -= 5
 	elif keys[3]:
-		if playerpos[0]>=40 :
-			playerpos[0] += 5
+		playerpos[0] += 5
 	# 10 - 输赢判断
 	# if pygame.time.get_ticks() >= 90000:
 	# running = 0
-	# 	exitcode = 1
+	# exitcode = 1
 	# if healthvalue <= 0:
 	# 	running = 0
 	# 	exitcode = 0
@@ -212,7 +212,7 @@ while running:
 # 11 - 输赢显示
 # if exitcode == 0:
 # pygame.font.init()
-# 	font = pygame.font.Font(None, 24)
+# font = pygame.font.Font(None, 24)
 # 	text = font.render("Accuracy:" + str(accuracy) + "%", True, (255, 0, 0))
 # 	textRect = text.get_rect()
 # 	textRect.centerx = screen.get_rect().centerx
